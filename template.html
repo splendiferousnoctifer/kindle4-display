@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="refresh" content="60">
+<meta name="viewport" content="width=600, height=800, user-scalable=no">
+<title>Kindle</title>
+<style type="text/css">
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 600px;
+  height: 800px;
+  overflow: hidden;
+  background: #ffffff;
+  color: #000000;
+  font-family: Georgia, "Times New Roman", serif;
+}
+table.frame {
+  width: 600px;
+  height: 800px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+td {
+  padding: 0;
+  vertical-align: middle;
+}
+.pad {
+  padding: 28px 36px;
+}
+.rule {
+  height: 4px;
+  background: #000000;
+  font-size: 1px;
+  line-height: 1px;
+}
+.weekday {
+  font-size: 36px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.date {
+  font-size: 42px;
+  font-weight: bold;
+  padding-top: 8px;
+}
+.time {
+  font-size: 96px;
+  font-weight: bold;
+  letter-spacing: -2px;
+  padding-top: 12px;
+  line-height: 1;
+}
+.temp {
+  font-size: 120px;
+  font-weight: bold;
+  line-height: 0.9;
+}
+.cond {
+  font-size: 36px;
+  text-transform: uppercase;
+  padding-top: 10px;
+}
+.meta {
+  font-size: 24px;
+  padding-top: 8px;
+}
+.msg-label {
+  font-size: 22px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding-bottom: 12px;
+}
+.msg {
+  font-size: 32px;
+  line-height: 1.35;
+}
+</style>
+</head>
+<body>
+<table class="frame" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="pad" style="height: 280px;">
+      <div class="weekday" id="weekday">{{WEEKDAY}}</div>
+      <div class="date" id="date">{{DATE}}</div>
+      <div class="time" id="time">{{TIME}}</div>
+    </td>
+  </tr>
+  <tr><td class="rule"></td></tr>
+  <tr>
+    <td class="pad" style="height: 250px;">
+      <div class="temp">{{TEMP}}</div>
+      <div class="cond">{{CONDITION}}</div>
+      <div class="meta">{{CITY}} · {{WEATHER_EXTRA}}</div>
+    </td>
+  </tr>
+  <tr><td class="rule"></td></tr>
+  <tr>
+    <td class="pad" style="height: 262px; vertical-align: top;">
+      <div class="msg-label">Message</div>
+      <div class="msg">{{MESSAGE}}</div>
+    </td>
+  </tr>
+</table>
+<script type="text/javascript">
+(function () {
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+  function tick() {
+    var d = new Date();
+    var w = document.getElementById("weekday");
+    var da = document.getElementById("date");
+    var t = document.getElementById("time");
+    if (w) w.innerHTML = days[d.getDay()];
+    if (da) da.innerHTML = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+    if (t) t.innerHTML = pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+  tick();
+  setInterval(tick, 15000);
+})();
+</script>
+</body>
+</html>
