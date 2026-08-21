@@ -17,17 +17,17 @@ html, body {
   font-family: Georgia, "Times New Roman", serif;
 }
 .stage {
-  width: 728px;
-  height: 582px;
+  width: 782px;
+  height: 528px;
   overflow: hidden;
   -webkit-transform-origin: 0 0;
-  -webkit-transform: translate(0, 68px) rotate(90deg) translate(0, -582px);
+  -webkit-transform: translate(68px, 0) rotate(90deg) translate(0, -528px);
   transform-origin: 0 0;
-  transform: translate(0, 68px) rotate(90deg) translate(0, -582px);
+  transform: translate(68px, 0) rotate(90deg) translate(0, -528px);
 }
 table.frame {
-  width: 728px;
-  height: 582px;
+  width: 782px;
+  height: 528px;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -35,7 +35,7 @@ td {
   padding: 0;
 }
 .hdr {
-  height: 88px;
+  height: 80px;
   background: #000000;
   color: #ffffff;
 }
@@ -70,11 +70,11 @@ td {
   line-height: 1;
 }
 .body {
-  height: 376px;
+  height: 348px;
 }
 .body-inner {
   width: 100%;
-  height: 376px;
+  height: 348px;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -100,8 +100,8 @@ td {
   padding-top: 8px;
 }
 .fc-wrap {
-  width: 478px;
-  padding: 8px 18px 8px 16px;
+  width: 532px;
+  padding: 6px 18px 6px 16px;
   vertical-align: middle;
 }
 .hours {
@@ -110,7 +110,7 @@ td {
   table-layout: fixed;
 }
 .hours td {
-  padding: 12px 6px;
+  padding: 8px 6px;
   border-top: 2px solid #000000;
   vertical-align: middle;
 }
@@ -132,8 +132,8 @@ td {
   text-transform: uppercase;
 }
 .msg-cell {
-  height: 118px;
-  padding: 18px 22px 16px 22px;
+  height: 100px;
+  padding: 14px 22px 12px 22px;
   vertical-align: middle;
   background: #000000;
   color: #ffffff;
@@ -156,7 +156,7 @@ td {
             <div class="date" id="date">August 21, 2026</div>
           </td>
           <td class="hdr-right">
-            <div class="time" id="time">12:18</div>
+            <div class="time" id="time">12:21</div>
           </td>
         </tr>
       </table>
@@ -185,20 +185,20 @@ td {
 </div>
 <script type="text/javascript">
 (function () {
-  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  var h = 12;
+  var m = 21;
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
-  function tick() {
-    var d = new Date();
-    var w = document.getElementById("weekday");
-    var da = document.getElementById("date");
+  function show() {
     var t = document.getElementById("time");
-    if (w) w.innerHTML = days[d.getDay()];
-    if (da) da.innerHTML = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
-    if (t) t.innerHTML = pad(d.getHours()) + ":" + pad(d.getMinutes());
+    if (t) t.innerHTML = pad(h) + ":" + pad(m);
   }
-  tick();
-  setInterval(tick, 15000);
+  show();
+  setInterval(function () {
+    m++;
+    if (m >= 60) { m = 0; h++; }
+    if (h >= 24) { h = 0; }
+    show();
+  }, 60000);
 })();
 </script>
 </body>

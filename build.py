@@ -145,6 +145,8 @@ def render(cfg: dict) -> str:
         "{{WEEKDAY}}": now.strftime("%A"),
         "{{DATE}}": now.strftime("%B ") + str(now.day) + now.strftime(", %Y"),
         "{{TIME}}": now.strftime("%H:%M"),
+        "{{HOUR}}": str(now.hour),
+        "{{MINUTE}}": str(now.minute),
         "{{TEMP}}": html.escape(temp),
         "{{CONDITION}}": html.escape(cond),
         "{{CITY}}": html.escape(cfg.get("city") or "Linz"),
