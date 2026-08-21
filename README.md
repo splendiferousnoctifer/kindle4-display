@@ -16,7 +16,9 @@ Preview on a computer (HTTPS): `https://splendiferousnoctifer.github.io/kindle4-
 
 ## Message gist
 
-1. Create a **public** gist whose body is the message (plain text).
+The filename does not matter. Use **`.txt`** (for example `message.txt`). `.md` also works. The page shows the file’s plain text, not GitHub formatting.
+
+1. Create a **public** gist, filename `message.txt`, body = the message.
 2. Open the gist, click **Raw**, copy that URL.
 3. Put it in `config.json` as `gist_url`.
 4. Push to `main`. Actions will pick it up within a few minutes.

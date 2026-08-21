@@ -24,80 +24,158 @@ table.frame {
 }
 td {
   padding: 0;
+}
+.hdr {
+  height: 168px;
+  background: #000000;
+  color: #ffffff;
+}
+.hdr-inner {
+  width: 100%;
+  border-collapse: collapse;
+}
+.hdr-left {
+  padding: 28px 0 24px 32px;
+  vertical-align: middle;
+  width: 58%;
+}
+.hdr-right {
+  padding: 20px 32px 20px 0;
+  vertical-align: middle;
+  text-align: right;
+  width: 42%;
+}
+.weekday {
+  font-size: 22px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+.date {
+  font-size: 28px;
+  padding-top: 10px;
+}
+.time {
+  font-size: 72px;
+  font-weight: bold;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.now {
+  height: 248px;
+  padding: 28px 32px 20px 32px;
   vertical-align: middle;
 }
-.pad {
-  padding: 28px 36px;
+.temp {
+  font-size: 108px;
+  font-weight: bold;
+  line-height: 0.88;
 }
-.rule {
-  height: 4px;
+.cond {
+  font-size: 28px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding-top: 8px;
+}
+.meta {
+  font-size: 20px;
+  padding-top: 8px;
+}
+.hair {
+  height: 2px;
   background: #000000;
   font-size: 1px;
   line-height: 1px;
 }
-.weekday {
-  font-size: 36px;
-  letter-spacing: 2px;
+.fc-wrap {
+  height: 176px;
+  padding: 16px 20px 12px 20px;
+  vertical-align: top;
+}
+.fc {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.fc td {
+  width: 33%;
+  text-align: center;
+  vertical-align: top;
+  padding: 8px 4px 4px 4px;
+  border-left: 2px solid #000000;
+}
+.fc td.first {
+  border-left: 0;
+}
+.fc-day {
+  font-size: 16px;
+  letter-spacing: 3px;
   text-transform: uppercase;
+  padding-bottom: 8px;
 }
-.date {
-  font-size: 42px;
+.fc-hi {
+  font-size: 36px;
   font-weight: bold;
-  padding-top: 8px;
-}
-.time {
-  font-size: 96px;
-  font-weight: bold;
-  letter-spacing: -2px;
-  padding-top: 12px;
   line-height: 1;
 }
-.temp {
-  font-size: 120px;
-  font-weight: bold;
-  line-height: 0.9;
+.fc-lo {
+  font-size: 22px;
+  padding-top: 4px;
 }
-.cond {
-  font-size: 36px;
+.fc-cond {
+  font-size: 18px;
   text-transform: uppercase;
+  letter-spacing: 1px;
   padding-top: 10px;
 }
-.meta {
-  font-size: 24px;
-  padding-top: 8px;
+.msg-cell {
+  height: 206px;
+  padding: 22px 32px 24px 32px;
+  vertical-align: top;
+  background: #000000;
+  color: #ffffff;
 }
 .msg-label {
-  font-size: 22px;
-  letter-spacing: 3px;
+  font-size: 16px;
+  letter-spacing: 4px;
   text-transform: uppercase;
   padding-bottom: 12px;
 }
 .msg {
-  font-size: 32px;
-  line-height: 1.35;
+  font-size: 28px;
+  line-height: 1.32;
 }
 </style>
 </head>
 <body>
 <table class="frame" cellspacing="0" cellpadding="0">
   <tr>
-    <td class="pad" style="height: 280px;">
-      <div class="weekday" id="weekday">{{WEEKDAY}}</div>
-      <div class="date" id="date">{{DATE}}</div>
-      <div class="time" id="time">{{TIME}}</div>
+    <td class="hdr">
+      <table class="hdr-inner" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="hdr-left">
+            <div class="weekday" id="weekday">{{WEEKDAY}}</div>
+            <div class="date" id="date">{{DATE}}</div>
+          </td>
+          <td class="hdr-right">
+            <div class="time" id="time">{{TIME}}</div>
+          </td>
+        </tr>
+      </table>
     </td>
   </tr>
-  <tr><td class="rule"></td></tr>
   <tr>
-    <td class="pad" style="height: 250px;">
+    <td class="now">
       <div class="temp">{{TEMP}}</div>
       <div class="cond">{{CONDITION}}</div>
-      <div class="meta">{{CITY}} · {{WEATHER_EXTRA}}</div>
+      <div class="meta">{{CITY}} &nbsp;&middot;&nbsp; {{WEATHER_EXTRA}}</div>
     </td>
   </tr>
-  <tr><td class="rule"></td></tr>
+  <tr><td class="hair"></td></tr>
   <tr>
-    <td class="pad" style="height: 262px; vertical-align: top;">
+    <td class="fc-wrap">{{FORECAST}}</td>
+  </tr>
+  <tr>
+    <td class="msg-cell">
       <div class="msg-label">Message</div>
       <div class="msg">{{MESSAGE}}</div>
     </td>
