@@ -53,40 +53,48 @@ def short_cond(desc: str) -> str:
     return (desc or "—")[:12]
 
 
-def forecast_html(days: list[dict], units: str) -> str:
-    if not days:
-        return '<div class="fc-cond">Forecast unavailable</div>'
-    hi_key = "maxtempC" if units.upper() != "F" else "maxtempF"
-    lo_key = "mintempC" if units.upper() != "F" else "mintempF"
+def hour_from_wttr(value: object) -> int | None:
+    try:
+        n = int(value)
+    except (TypeError, ValueError):
+        return None
+    if n < 24:
+        return n
+    return n // 100
+
+
+def forecast_html(today: dict | None, units: str, now: datetime) -> str:
+    hours = list((today or {}).get("hourly") or [])
+    parsed = []
+    for slot in hours:
+        h = hour_from_wttr(slot.get("time"))
+        if h is None:
+            continue
+        parsed.append((h, slot))
+    upcoming = [(h, slot) for h, slot in parsed if h >= now.hour]
+    if not upcoming:
+        upcoming = parsed[-4:]
+    upcoming = upcoming[:6]
+    if not upcoming:
+        return '<div class="fc-cond">No hourly forecast today</div>'
+    temp_key = "tempC" if units.upper() != "F" else "tempF"
     cells = []
-    for i, day in enumerate(days[:3]):
-        date_s = day.get("date") or ""
+    for i, (h, slot) in enumerate(upcoming):
         try:
-            dt = datetime.strptime(date_s, "%Y-%m-%d")
-            label = dt.strftime("%a")
-        except ValueError:
-            label = "—"
-        counts: dict[str, int] = {}
-        for hour in day.get("hourly") or []:
-            try:
-                desc_h = hour["weatherDesc"][0]["value"]
-            except (KeyError, IndexError, TypeError):
-                continue
-            counts[desc_h] = counts.get(desc_h, 0) + 1
-        desc = max(counts, key=counts.get) if counts else ""
+            desc = slot["weatherDesc"][0]["value"]
+        except (KeyError, IndexError, TypeError):
+            desc = ""
+        temp = slot.get(temp_key, "—")
         cls = "first" if i == 0 else ""
         cells.append(
             "<td class='"
             + cls
             + "'>"
-            "<div class='fc-day'>"
-            + html.escape(label)
+            "<div class='fc-hour'>"
+            + html.escape(f"{h:02d}h")
             + "</div>"
-            "<div class='fc-hi'>"
-            + html.escape(str(day.get(hi_key, "—")))
-            + "°</div>"
-            "<div class='fc-lo'>"
-            + html.escape(str(day.get(lo_key, "—")))
+            "<div class='fc-temp'>"
+            + html.escape(str(temp))
             + "°</div>"
             "<div class='fc-cond'>"
             + html.escape(short_cond(desc))
@@ -95,9 +103,9 @@ def forecast_html(days: list[dict], units: str) -> str:
     return "<table class='fc' cellspacing='0' cellpadding='0'><tr>" + "".join(cells) + "</tr></table>"
 
 
-def weather(city: str, units: str) -> tuple[str, str, str, str]:
+def weather(city: str, units: str, now: datetime) -> tuple[str, str, str, str]:
     loc = urllib.parse.quote(city)
-    empty_fc = forecast_html([], units)
+    empty_fc = forecast_html(None, units, now)
     try:
         data = json.loads(fetch(f"https://wttr.in/{loc}?format=j1"))
         cur = data["current_condition"][0]
@@ -106,11 +114,12 @@ def weather(city: str, units: str) -> tuple[str, str, str, str]:
         cond = (cur["weatherDesc"][0]["value"] or "").strip()
         extra = f"{cur['humidity']}% humidity"
         days = data.get("weather") or []
-        if days and days[0].get("maxtempC"):
+        today = days[0] if days else None
+        if today and today.get("maxtempC"):
             hi_key = "maxtempC" if units.upper() != "F" else "maxtempF"
             lo_key = "mintempC" if units.upper() != "F" else "mintempF"
-            extra = f"H {days[0][hi_key]}°  /  L {days[0][lo_key]}°   ·   {cur['humidity']}%"
-        return temp, cond, extra, forecast_html(days, units)
+            extra = f"H {today[hi_key]}°  /  L {today[lo_key]}°   ·   {cur['humidity']}%"
+        return temp, cond, extra, forecast_html(today, units, now)
     except (urllib.error.URLError, TimeoutError, KeyError, json.JSONDecodeError, IndexError):
         return "--°", "Weather unavailable", city, empty_fc
 
@@ -134,7 +143,7 @@ def gist_message(url: str) -> str:
 def render(cfg: dict) -> str:
     tz = ZoneInfo(cfg.get("timezone") or "Europe/Vienna")
     now = datetime.now(tz)
-    temp, cond, extra, forecast = weather(cfg.get("city") or "Linz", cfg.get("units") or "C")
+    temp, cond, extra, forecast = weather(cfg.get("city") or "Linz", cfg.get("units") or "C", now)
     message = gist_message(cfg.get("gist_url") or "")
     tpl = TEMPLATE_PATH.read_text(encoding="utf-8")
     replacements = {
