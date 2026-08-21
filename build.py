@@ -42,9 +42,7 @@ def short_cond(desc: str) -> str:
         return "Rain"
     if "fog" in d or "mist" in d:
         return "Fog"
-    if "overcast" in d:
-        return "Overcast"
-    if "cloud" in d:
+    if "overcast" in d or "cloud" in d:
         return "Clouds"
     if "clear" in d or "sunny" in d:
         return "Clear"
@@ -74,33 +72,30 @@ def forecast_html(today: dict | None, units: str, now: datetime) -> str:
     upcoming = [(h, slot) for h, slot in parsed if h >= now.hour]
     if not upcoming:
         upcoming = parsed[-4:]
-    upcoming = upcoming[:6]
+    upcoming = upcoming[:4]
     if not upcoming:
-        return '<div class="fc-cond">No hourly forecast today</div>'
+        return "<div class='h-cond'>No hourly forecast today</div>"
     temp_key = "tempC" if units.upper() != "F" else "tempF"
-    cells = []
+    rows = []
     for i, (h, slot) in enumerate(upcoming):
         try:
             desc = slot["weatherDesc"][0]["value"]
         except (KeyError, IndexError, TypeError):
             desc = ""
         temp = slot.get(temp_key, "—")
-        cls = "first" if i == 0 else ""
-        cells.append(
-            "<td class='"
+        cls = " class='first'" if i == 0 else ""
+        rows.append(
+            "<tr"
             + cls
-            + "'>"
-            "<div class='fc-hour'>"
-            + html.escape(f"{h:02d}h")
-            + "</div>"
-            "<div class='fc-temp'>"
+            + "><td class='h-time'>"
+            + html.escape(f"{h:02d}:00")
+            + "</td><td class='h-temp'>"
             + html.escape(str(temp))
-            + "°</div>"
-            "<div class='fc-cond'>"
+            + "°</td><td class='h-cond'>"
             + html.escape(short_cond(desc))
-            + "</div></td>"
+            + "</td></tr>"
         )
-    return "<table class='fc' cellspacing='0' cellpadding='0'><tr>" + "".join(cells) + "</tr></table>"
+    return "<table class='hours' cellspacing='0' cellpadding='0'>" + "".join(rows) + "</table>"
 
 
 def weather(city: str, units: str, now: datetime) -> tuple[str, str, str, str]:
