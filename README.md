@@ -7,12 +7,12 @@ A 600×800 black-and-white page for the Kindle 4 experimental browser: date, wea
 GitHub Pages is HTTPS-only, which the Kindle 4 browser cannot use. After this repo is on GitHub, open **HTTP** (not https) in **Menu → Experimental → Browser**:
 
 ```
-http://raw.githack.com/samzuehlke/kindle4-display/main/docs/index.html
+http://raw.githack.com/splendiferousnoctifer/kindle4-display/main/docs/index.html
 ```
 
 Add that as a bookmark. Leave the browser open; the page refreshes itself every 60 seconds.
 
-Preview on a computer (HTTPS): `https://samzuehlke.github.io/kindle4-display/`
+Preview on a computer (HTTPS): `https://splendiferousnoctifer.github.io/kindle4-display/`
 
 ## Message gist
 

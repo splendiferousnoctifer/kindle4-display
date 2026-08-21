@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent
 CONFIG_PATH = ROOT / "config.json"
 TEMPLATE_PATH = ROOT / "template.html"
 OUT_PATH = ROOT / "docs" / "index.html"
-USER_AGENT = "kindle4-display/1.0 (+https://github.com/samzuehlke/kindle4-display)"
+USER_AGENT = "kindle4-display/1.0 (+https://github.com/splendiferousnoctifer/kindle4-display)"
 
 
 def load_config() -> dict:
